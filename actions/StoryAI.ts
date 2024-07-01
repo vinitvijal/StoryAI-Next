@@ -8,7 +8,7 @@ const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY as string);
 
 async function storyGen(info: String, extra?: String){
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
-    const prompt = "Write a story in simple english";
+    const prompt = "Write a story in simple english.";
     const result = await model.generateContent([prompt, info?.toString(), extra as string]);
     const response = await result.response;
     const text = response.text();

@@ -10,10 +10,12 @@ export default function Home() {
   const [extra, setextra] = useState("");
   const [image, setImage] = useState<File>();
   const [story, setstory] = useState("");
+  const [loading, setloading] = useState(false);
 
 
 
   async function imageToStory(){
+    setloading(true);
     if(image === undefined){
       return;
     }
@@ -23,6 +25,7 @@ export default function Home() {
       const data = await GetStory(reader.result?.toString() || "", extra);
       console.log(data);
       setstory(data.toString());
+      setloading(false);
     };
     // const data = await GetStory(data);
     
@@ -42,7 +45,7 @@ export default function Home() {
       </header>
       <main className=" flex-1 w-full flex">
         <section className=" h-full flex justify-center items-center  flex-col w-2/5">
-          <div className=" flex-1 w-full max-h-[70vh]  flex justify-center items-center">
+          <div className=" flex-1 w-full max-h-[70vh] overflow-y-auto pt-10 flex justify-center items-center">
             {story.length === 0 ? <Image
               src="/StoryAI.png"
               alt="alt"
@@ -50,7 +53,7 @@ export default function Home() {
               height={1000}
               className=" w-4/5"
             /> : 
-            <h1 className=" text-zinc-700 text-2xl p-8 overflow-y-auto text-center">{story}</h1>
+            <p className=" text-zinc-700 text-2xl p-8 text-center">{story}</p>
             }
           </div>
           <div className=" h-20 border-t p-4">
@@ -91,8 +94,9 @@ export default function Home() {
                 <button
                   className=" text-white px-4 py-3 rounded-xl bg-[#137348] hover:bg-[#0b4b2e] "
                   onClick={() => imageToStory()}
+                  disabled={loading}
                 >
-                  Generate Story
+                  {!loading ? "Generate Story": "Loading..."}
                 </button>
                 <button
                   className="  text-white px-4 py-3 rounded-xl bg-[#137348]  hover:bg-[#0b4b2e]"
