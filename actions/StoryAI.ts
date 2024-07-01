@@ -17,15 +17,15 @@ async function storyGen(info: String, extra?: String){
 }
 
 
-async function imageMeaningGen(imageData: String){
+async function imageMeaningGen(imageData: String, extra?: String){
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
     console.log("Meaning Generating")
-    const prompt = "What's in this picture?";
+    const prompt = "Write a story in simple english. based on the image provided.";
 
     if (imageData === null) {
         return;
     }
-    const result = await model.generateContent([prompt, imageData.toString()]);
+    const result = await model.generateContent([prompt, imageData.toString(), extra as string]);
     const response = await result.response;
     const text = response.text();
     console.log("Meaning Generated")
@@ -36,7 +36,7 @@ async function imageMeaningGen(imageData: String){
 export default async function GetStory(image: String, extraPrompt?: String) {
     console.log("Starting Meaning Generation")
     console.log(extraPrompt)
-    const data = await imageMeaningGen(image);
+    const data = await imageMeaningGen(image, extraPrompt);
     console.log(data)
     if (data === undefined) {
         return NextResponse.json({
@@ -44,6 +44,6 @@ export default async function GetStory(image: String, extraPrompt?: String) {
         });
     }
     console.log("Starting Story Generation")
-    const story = await storyGen(data, extraPrompt);
-    return story;
+    // const story = await storyGen(data, extraPrompt);
+    return data;
 }
